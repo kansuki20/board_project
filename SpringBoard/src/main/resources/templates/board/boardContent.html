@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+	<button id="back" onclick="location.href='/'">back</button>
+	<button id="board-fix" type="button" onclick="updateBoardCheck()">글 수정</button>
+	<button id="board-delete" type="button" onclick="deleteBoard()">글 삭제</button>
+	<table border=1>
+		<thead>
+			<tr>
+				<td>No</td>
+				<td>작성자</td>
+				<td>제목</td>
+				<td th:text="${#dates.format(boardVo.joinDate, 'yyyy-MM-dd HH:mm')}"></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td th:text="${boardVo.boardId}" id="boardId"></td>
+				<td th:text="${boardVo.memberId}"></td>
+				<td colspan="2" th:text="${boardVo.title}" id="boardTitle"></td>
+			</tr>
+			<tr>
+				<td colspan="4" style="text-align: center;">내용</td>
+			</tr>
+			<tr>
+				<td colspan="4" th:text="${boardVo.content}" id="boardContent" style="text-align: center;"></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+<script type="text/javascript">
+	function deleteBoard() {
+		$.ajax({
+			type: "post",
+			url: "deleteBoard",
+			data: {boardId: $('#boardId').text()},
+			success: function(data) {
+				if (data == 'true') {
+					alert("게시물이 삭제되었습니다");
+					location.href = "/";
+				} else if(data == 'not my'){
+					alert("is not my board");
+				} else {
+					alert("login pleese");
+				}
+			}
+		});
+	}
+	function updateBoardCheck() {
+		$.ajax({
+			type: "post",
+			url: "updateBoardForm",
+			data: {boardId: $('#boardId').text()},
+			success: function(data) {
+				if (data == 'true') {
+					moveUpdateBoard();
+				} else if(data == 'not my'){
+					alert("is not my board");
+				} else {
+					alert("login pleese");
+				}
+			}
+		});
+	}
+	function moveUpdateBoard() {
+		var form = document.createElement("form");
+		var obj = document.createElement('input');
+		obj.setAttribute('type', 'hideen');
+		obj.setAttribute('name', 'boardId');
+		obj.setAttribute('value', $('#boardId').text());
+		
+		form.appendChild(obj);
+		form.setAttribute('method', 'post');
+		form.setAttribute('action', 'moveUpdate');
+		document.body.appendChild(form);
+		form.submit();
+	}
+</script>
+</html>

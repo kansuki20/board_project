@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+</head>
+<body>
+    <form action="/fixProfile" method="post">
+        <div>
+            <label for="name">id</label>
+            <input type="text" id="id" name="id" th:value=${session.login_info.id} readonly>
+        </div>
+        <div>
+            <label for="name">pwd</label>
+            <input type="text" id="pwd" name="pwd" th:value=${session.login_info.pwd}>
+        </div>
+        <div>
+            <label for="name">name</label>
+            <input type="text" id="name" name="name" th:value=${session.login_info.name}>
+        </div>
+        <div>
+            <label for="name">email</label>
+            <input type="text" id="email" name="email" th:value=${session.login_info.email}>
+        </div>
+        <button type="submit">수정</button>
+        <button type="button" onclick="location.href='/'">취소</button>
+    </form>
+</body>
+</html>

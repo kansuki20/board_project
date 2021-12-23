@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+</head>
+<body>
+	<form action="/updateBoard" method="post">
+		<input id="boardId" name="boardId" type="hidden" th:value="${boardVo.boardId}">
+		<h4>title</h4>
+		<input id="title" name="title" type="text" th:value="${boardVo.title}"><br><br>
+		<h4>content</h4>
+		<input id="content" name="content" type="text" th:value="${boardVo.content}" style="width:300px; height:200px;"><br>
+		<input type="submit" value="수정">
+	</form>
+</body>
+</html>

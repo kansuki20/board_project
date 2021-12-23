@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>MainPage</title>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+	<h1>게시판</h1>
+	<div th:if="${session.login_info == null}">
+		<input id="id" name="id" type="text" placeholder="id"><br>
+		<input id="pwd" name="pwd" type="text" placeholder="password"><br>
+		<button onclick="login()">로그인</button>
+		<button type="button" onclick="location.href='/joinMember'">회원 가입</button>
+	</div>
+	<div th:if="${session.login_info != null}">
+		<p th:text="${session.login_info.name}"></p>
+		<button type="button" onclick="location.href='/fixProfileForm'">회원 정보 수정</button>
+		<button type="button" onclick="location.href='/signOut'">회원 탈퇴</button>
+	</div>
+	<br>
+	<button onclick="location.href='/members'">회원 목록</button>
+	<button th:if="${session.login_info != null}" onclick="logout()">로그아웃</button>
+	<div>
+		<h2>게시글</h2>
+		<button th:if="${session.login_info != null}" onclick="location.href='/createBoard'">글 작성</button>
+		<table id="board-table">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>제목</th>
+					<th>작성자</th>
+					<th>작성일</th>
+				</tr>
+				<tr class="content" th:each="board : ${boardList}">
+					<td th:text="${board.boardId}"></td>
+					<td th:text="${board.title}"></td>
+					<td th:text="${board.memberId}"></td>
+					<td th:text="${#dates.format(board.joinDate, 'yyyy-MM-dd HH:mm')}"></td>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</body>
+	<script type="text/javascript">
+		function login() {
+			if($('#id').val() == '') {
+				alert('아이디를 입력하세요');
+				$('#id').focus();
+				return;
+			} else if($('#pwd').val() == '') {
+				alert('비밀번호를 입력하세요');
+				$('#pwd').focus();
+				return;
+			}
+			$.ajax({
+				type: 'post',
+				url: 'login',
+				data: {id:$('#id').val(), pwd:$('#pwd').val()},
+				success: function(data) {
+					if(data == 'true') {
+						location.reload();
+					} else {
+						alert("아이디나 비밀번호가 잘못되었습니다");
+						$('#id').focus();
+					}
+				}
+			});
+		}
+		function logout() {
+			$.ajax({
+				type: "post",
+				url: "logout",
+				success: function() {
+					location.reload();
+				}
+			});
+		}
+		$(".content").click(function(){
+			var tr = $(this);
+			var td = tr.children();
+			var boardNo = td.eq(0).text();
+			console.log(boardNo);
+			location.href = "content?boardNo=" + boardNo;
+		});
+	</script>
+</html>

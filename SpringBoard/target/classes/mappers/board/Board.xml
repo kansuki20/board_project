@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.mappers.BoardMapper">
+	<select id="getAllBoard" resultType="BoardVO">
+		SELECT
+			board_id AS boardId,
+			member_id AS memberId,
+			title,
+			content,
+			joinDate
+		FROM
+			BOARD
+		ORDER BY BOARD_ID DESC
+	</select>
+	<select id="getOneBoard" resultType="BoardVO">
+		SELECT
+			board_id AS boardId,
+			member_id AS memberId,
+			title,
+			content,
+			joinDate
+		FROM
+			BOARD
+		WHERE 
+			board_id = ${boardId}
+	</select>
+	<insert id="createBoard">
+		INSERT INTO
+			BOARD
+		VALUES
+		(
+			BOARD_SEQ.NEXTVAL,
+			#{memberId},
+			#{title},
+			#{content},
+			SYSDATE
+		)
+	</insert>
+	<update id="updateBoard">
+		UPDATE
+			BOARD
+		SET
+			TITLE = #{title},
+			CONTENT = #{content}
+		WHERE
+			BOARD_ID = #{boardId}
+	</update>
+	<delete id="deleteBoard">
+		DELETE FROM
+			board
+		WHERE
+			board_id = #{boardId}
+	</delete>
+	<select id="checkBoard" resultType="Integer">
+		SELECT
+			board_id
+		FROM
+			board
+		WHERE
+			board_id = #{boardId} AND member_id = #{memberId}
+	</select>
+
+</mapper>
